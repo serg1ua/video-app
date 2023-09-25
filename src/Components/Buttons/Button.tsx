@@ -9,7 +9,7 @@ type ButtonAnchorAttributes = ButtonHTMLAttributes<HTMLButtonElement> &
   AnchorHTMLAttributes<HTMLAnchorElement>;
 
 interface ButtonProps extends ButtonAnchorAttributes {
-  variant?: 'primary';
+  variant?: 'primary' | 'tertiary-gray';
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   href?: string;
 }
