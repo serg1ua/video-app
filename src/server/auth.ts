@@ -60,6 +60,12 @@ export const authOptions: NextAuthOptions = {
       from: env.EMAIL_FROM,
     }),
   ],
+  theme: {
+    colorScheme: 'light',
+    brandColor: '#0d9488',
+    logo: '/video-app.svg',
+    buttonText: '#FFFFFF',
+  },
 };
 
 /**

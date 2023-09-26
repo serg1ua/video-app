@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, Fragment, KeyboardEvent, useState } from 'react';
 import Button from './Buttons/Button';
-import { Logo, Search } from './Icons';
+import { DotsVertical, Logo, Search } from './Icons';
+import UserImage from './UserImage';
 
 interface NavbarProps {
   navbarItem?: JSX.Element;
@@ -13,6 +14,7 @@ interface NavbarProps {
 interface NavigationItem {
   name: string;
   path: string;
+  lineAbove?: boolean;
 }
 
 function classNames(...classes: string[]) {
@@ -23,22 +25,26 @@ export default function Navbar({ navbarItem }: NavbarProps) {
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id;
 
-  const Navbar: NavigationItem[] = [
+  const userMenuItems: NavigationItem[] = [
     {
       name: 'Profile',
       path: `/${String(userId)}/Videos`,
+      lineAbove: true,
     },
     {
       name: 'Dashboard',
       path: '/Dashboard',
+      lineAbove: true,
     },
     {
       name: 'Settings',
       path: '/Settings',
+      lineAbove: true,
     },
     {
       name: 'Log Out',
       path: 'sign-out',
+      lineAbove: true,
     },
   ];
 
@@ -99,7 +105,11 @@ export default function Navbar({ navbarItem }: NavbarProps) {
             <Menu as='div' className='relative ml-5 flex-shrink-0'>
               <div>
                 <Menu.Button className='flex rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2'>
-                  {sessionData ? <>User</> : <>No user</>}
+                  {sessionData ? (
+                    <UserImage image={sessionData?.user.image} />
+                  ) : (
+                    <DotsVertical className='w-5 stroke-gray-700' />
+                  )}
                 </Menu.Button>
               </div>
               <Transition
@@ -113,8 +123,9 @@ export default function Navbar({ navbarItem }: NavbarProps) {
               >
                 <Menu.Items className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                   {sessionData ? (
-                    <div className=' mx-4 my-2 flex  '>
-                      <div className='ml-2 flex w-full flex-col justify-start truncate '>
+                    <div className=' mx-4 my-2 flex '>
+                      <UserImage image={sessionData?.user.image} />
+                      <div className='ml-2 flex w-full flex-col justify-start truncate'>
                         <p className='truncate text-sm font-semibold text-gray-700'>
                           {sessionData && <span>{sessionData.user?.name}</span>}
                         </p>
@@ -130,7 +141,7 @@ export default function Navbar({ navbarItem }: NavbarProps) {
                       Menu
                     </p>
                   )}
-                  {Navbar.map((item) => (
+                  {userMenuItems.map((item) => (
                     <Menu.Item key={item.name}>
                       {({ active }: { active: boolean }) => (
                         <Link
@@ -161,16 +172,9 @@ export default function Navbar({ navbarItem }: NavbarProps) {
                 <Button
                   variant='tertiary-gray'
                   size='md'
-                  onClick={!sessionData ? () => void signIn() : () => ''}
+                  onClick={() => void signIn()}
                 >
-                  Log in
-                </Button>
-                <Button
-                  variant='primary'
-                  size='md'
-                  onClick={!sessionData ? () => void signIn() : () => ''}
-                >
-                  Sign up
+                  Log In / Sign In
                 </Button>
               </div>
             )}
